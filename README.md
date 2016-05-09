@@ -3,7 +3,7 @@
 
 To download, look [there](https://github.com/FaigerSYS/superBAR/releases).
 
-All setup instructions you can see in the [config](http://link.to.config)
+All setup instructions you can see in the [config](https://github.com/FaigerSYS/superBAR/blob/master/resources/config.yml)
 
 ## License
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.  
