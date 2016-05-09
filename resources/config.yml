@@ -1,0 +1,36 @@
+#superBAR config. Plugin by FaigerSYS
+#For you :3 "§§§"
+ver: 1
+
+#Hotbar format
+format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
+
+#Tip:
+# %NICK% - name of player
+# %MONEY% - count of player's money
+# %ITEM% - ID (and META/DAMAGE) of item in hand
+# %FACTION% - player's faction
+# %TIME% - time (timezone you can set at "/path_to_server/bin/php*/bin/php.ini", param "date.timezone")
+#   For more info about timezone, ask on forums, or OK,Google :P
+# %ONLINE% - how many players now on server
+# %MAX_ONLINE% - max. online
+# \n - new line
+
+#Timer (every *setted parameter* ticks sends to player hotbar)
+timer: 10
+
+#Tip:
+# 20 ticks - 1 second
+# 1 tick - 1/20 seconds
+
+#Time format (for %TIME%)
+time-format: "H:i:s"
+
+#Tip:
+# H - hours
+# i - minutes
+# s - seconds
+# All strings you can see there: http://php.net/manual/en/function.date.php
+
+#This will be displayed (in %FACTION%) if the player does not have a faction
+no-faction: "NoFaction"
