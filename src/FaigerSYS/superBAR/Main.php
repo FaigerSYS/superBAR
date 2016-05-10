@@ -72,7 +72,7 @@ class hotBAR extends PluginTask {
 			$max_online = $this->getOwner()->getServer()->getMaxPlayers();
 			
 			$text = str_replace(array("%NICK%", "%MONEY%", "%FACTION%", "%ITEM%", "%TIME%", "%ONLINE%", "%MAX_ONLINE%"), array($name, @$money, @$faction, $item, $time, $online, $max_online), $this->getOwner()->FORMAT);
-			$player->sendTip($text);
+			$player->sendPopUp($text);
 		}
 	}
 	
