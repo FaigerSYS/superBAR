@@ -14,7 +14,14 @@ format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
 #   For more info about timezone, ask on forums, or OK,Google :P
 # %ONLINE% - how many players now on server
 # %MAX_ONLINE% - max. online
+# %X% / %Y% / %Z% - get X/Y/Z-coordinates of player
 # \n - new line
+
+#Type of hotbar (popup/tip)
+type: popup
+
+#Tip:
+# MCPE 0.14.2 does not support tips. So, I recommend using popup.
 
 #Timer (every *setted parameter* ticks sends to player hotbar)
 timer: 10
