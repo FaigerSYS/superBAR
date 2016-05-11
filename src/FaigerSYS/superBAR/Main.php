@@ -11,6 +11,7 @@ class Main extends PluginBase {
 	public $config;
 	public $ecoType;
 	public $noF;
+	public $popup;
 	
 	public $MONEY;
 	public $FACTION;
@@ -29,6 +30,9 @@ class Main extends PluginBase {
 		$this->FORMAT = $this->config->get("format");
 		$this->TIME_FORMAT = $this->config->get("time-format");
 		$this->noF = $this->config->get("no-faction");
+		if ($this->config->get("type") == "popup")
+			$this->popup = true;
+		
 		$ticks = preg_replace("/[^0-9]/", '', $this->config->get("timer"));
 		
 		if ($this->getServer()->getPluginManager()->getPlugin("EconomyAPI")) {
@@ -57,6 +61,10 @@ class hotBAR extends PluginTask {
 			$name = $player->getName();
 			$faction = "§c" . "NoFactPlug";
 			
+			$x = intval($player->x);
+			$y = intval($player->y);
+			$z = intval($player->z);
+			
 			if ($this->getOwner()->MONEY)
 				$money = $this->getMoney(strtolower($name));
 			if ($this->getOwner()->FACTION) {
@@ -71,8 +79,12 @@ class hotBAR extends PluginTask {
 			$online = count($this->getOwner()->getServer()->getOnlinePlayers());
 			$max_online = $this->getOwner()->getServer()->getMaxPlayers();
 			
-			$text = str_replace(array("%NICK%", "%MONEY%", "%FACTION%", "%ITEM%", "%TIME%", "%ONLINE%", "%MAX_ONLINE%"), array($name, @$money, @$faction, $item, $time, $online, $max_online), $this->getOwner()->FORMAT);
-			$player->sendTip($text);
+			$text = str_replace(array("%NICK%", "%MONEY%", "%FACTION%", "%ITEM%", "%TIME%", "%ONLINE%", "%MAX_ONLINE%", "%X%", "%Y%", "%Z%"), array($name, @$money, @$faction, $item, $time, $online, $max_online, $x, $y, $z), $this->getOwner()->FORMAT);
+			
+			if ($this->getOwner()->popup)
+				$player->sendPopup($text);
+			else
+				$player->sendTip($text);
 		}
 	}
 	
