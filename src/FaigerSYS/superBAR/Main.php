@@ -30,8 +30,11 @@ class Main extends PluginBase {
 		$this->FORMAT = $this->config->get("format");
 		$this->TIME_FORMAT = $this->config->get("time-format");
 		$this->noF = $this->config->get("no-faction");
+		
 		if ($this->config->get("type") !== "popup")
 			$this->popup = false;
+		else
+			$this->popup = true;
 		
 		$ticks = preg_replace("/[^0-9]/", '', $this->config->get("timer"));
 		
