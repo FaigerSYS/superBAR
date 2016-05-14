@@ -101,9 +101,9 @@ class hotBAR extends PluginTask {
 			else
 				$ppg = "§c" . "NoPPplug";
 			
-			if ($this->getOwner->KD) {
-				$kills = $this->getOwner->KD->getKills($name);
-				$deaths = $this->getOwner->KD->getDeaths($name);
+			if ($this->getOwner()->KD) {
+				$kills = $this->getOwner()->KD->getKills($name);
+				$deaths = $this->getOwner()->KD->getDeaths($name);
 			} else {
 				$kills = $deaths =  "§c" . "NoPlug";
 			}
