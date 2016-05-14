@@ -7,7 +7,7 @@ All setup instructions you can see in the [config](https://github.com/FaigerSYS/
 
 ## To-Do
 * [ ] Commands!
-* [ ] More features!!
+* [x] More features!!
 * [ ] Ability to customize the hotbar for each PP group!!!
 
 ## License
