@@ -1,24 +1,42 @@
 #superBAR config. Plugin by FaigerSYS
 #For you :3 "§§§"
-ver: 1
+ver: 2
+#DON'T CHANGE THIS!!!
 
 #Hotbar format
-format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
+hot-format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
 
 #Tip:
 # %NICK% - name of player
 # %MONEY% - count of player's money
-# %ITEM% - ID (and META/DAMAGE) of item in hand
+# %ITEM_ID% - ID of item in hand
+# %ITEM_META% - META/DAMAGE of item in hand
 # %FACTION% - player's faction
 # %TIME% - time (timezone you can set at "/path_to_server/bin/php*/bin/php.ini", param "date.timezone")
-#   For more info about timezone, ask on forums, or OK,Google :P
+#   List of timezones: https://secure.php.net/manual/ru/timezones.php
 # %ONLINE% - how many players now on server
 # %MAX_ONLINE% - max. online
 # %X% / %Y% / %Z% - get X/Y/Z-coordinates of player
+# %IP% - IP of player
+# %PP_GROUP% - PurePerms group of player
+# %TAG% - player's tag (text above player's head)
+# %LOAD% - load of server (0-100 ???)
+# %TPS% - TPS of server
+# %KILLS% / %DEATHS% - count of player's kills/deaths
+#   NEED KillChat. If you have installed CustomChat, install KillChat extension: https://forums.pocketmine.net/plugins/killchat-extension-cc.916/
+#   If not, or if there are problems, install modified version of KillChat: https://github.com/FaigerSYS/superBAR_additionally/raw/master/KillChat_MOD.phar
+# %LEVEL% - name of player's current world/level
 # \n - new line
 
+#The level of the text offset
+text-offset-level: 0
+
+#Tip:
+# A negative value (e.g. -1) - to left side
+# Average value (e.g. 1) - to right side
+
 #Type of hotbar (popup/tip)
-type: popup
+type: "popup"
 
 #Tip:
 # MCPE 0.14.2 does not support tips. So, I recommend using popup.
