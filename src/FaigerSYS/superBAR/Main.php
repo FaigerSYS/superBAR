@@ -1,6 +1,7 @@
 <?PHP
 namespace FaigerSYS\superBAR;
 
+use FaigerSYS\superBAR\ConfigUpdate;
 use pocketmine\utils\Config;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\PluginTask;
@@ -15,6 +16,8 @@ class Main extends PluginBase {
 	
 	public $MONEY;
 	public $FACTION;
+	public $PP;
+	public $KD;
 	
 	public $FORMAT;
 	public $TIME_FORMAT;
@@ -26,8 +29,10 @@ class Main extends PluginBase {
 		if (!file_exists($this->getDataFolder() . "config.yml"))
 			file_put_contents($this->getDataFolder() . "config.yml", $this->getResource("config.yml"));
 		$this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
+		$tmp = new ConfigUpdate;
+		$tmp->update($this);
 		
-		$this->FORMAT = $this->config->get("format");
+		$this->FORMAT = $this->config->get("hot-format");
 		$this->TIME_FORMAT = $this->config->get("time-format");
 		$this->noF = $this->config->get("no-faction");
 		
@@ -37,6 +42,19 @@ class Main extends PluginBase {
 			$this->popup = true;
 		
 		$ticks = preg_replace("/[^0-9]/", '', $this->config->get("timer"));
+		
+		$lvl = intval($this->config->get("text-offset-level"));
+		if ($lvl < 0) {
+			$n1 = str_pad("", -$lvl, "  ");
+			$n2 = $n1 . "\n";
+			$this->FORMAT = $this->FORMAT . $n1;
+			$this->FORMAT = str_replace("\n", $n2, $this->FORMAT);
+		} elseif ($lvl > 0) {
+			$n1 = str_pad("", $lvl, "  ");
+			$n2 = "\n" . $n1;
+			$this->FORMAT = $n1 . $this->FORMAT;
+			$this->FORMAT = str_replace("\n", $n2, $this->FORMAT);
+		}
 		
 		if ($this->getServer()->getPluginManager()->getPlugin("EconomyAPI")) {
 			$this->MONEY = $this->getServer()->getPluginManager()->getPlugin("EconomyAPI");
@@ -53,6 +71,19 @@ class Main extends PluginBase {
 			$this->getLogger()->info(CLR::GREEN . "FactionsPro OK!");
 		}
 		
+		if ($this->getServer()->getPluginManager()->getPlugin("PurePerms")) {
+			$this->PP = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
+			$this->getLogger()->info(CLR::GREEN . "PurePerms OK!");
+		}
+		
+		if ($this->getServer()->getPluginManager()->getPlugin("KillChat")) {
+			$this->KD = $this->getServer()->getPluginManager()->getPlugin("KillChat");
+			$this->getLogger()->info(CLR::GREEN . "KillChat OK!");
+		} elseif ($this->getServer()->getPluginManager()->getPlugin("ScorePvP")) {
+			$this->KD = $this->getServer()->getPluginManager()->getPlugin("ScorePvP");
+			$this->getLogger()->info(CLR::GREEN . "ScorePvP OK!");
+		}
+		
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new hotBAR($this), $ticks);
 		$this->getLogger()->info(CLR::GOLD . "superBAR by FaigerSYS enabled!");
 	}
@@ -62,27 +93,40 @@ class hotBAR extends PluginTask {
 	public function onRun($tick) {
 		foreach ($this->getOwner()->getServer()->getOnlinePlayers() as $player) {
 			$name = $player->getName();
-			$faction = "§c" . "NoFactPlug";
+			$ip = $player->getAddress();
+			$tag = $player->getNameTag();
+			
+			if ($this->getOwner()->PP)
+				$ppg = $this->PP->getUserDataMgr()->getGroup($this->PP->getPlayer($name));
+			else
+				$ppg = "§c" . "NoPPplug";
+			
+			if ($this->getOwner->KD) {
+				$kills = $this->getOwner->KD->getKills($name);
+				$deaths = $this->getOwner->KD->getDeaths($name);
+			} else {
+				$kills = $deaths =  "§c" . "NoPlug";
+			}
+			
+			$money = $this->getMoney(strtolower($name));
+			$faction = $this->getFaction($name);
 			
 			$x = intval($player->x);
 			$y = intval($player->y);
 			$z = intval($player->z);
+			$level = $player->getLevel()->getName();
 			
-			if ($this->getOwner()->MONEY)
-				$money = $this->getMoney(strtolower($name));
-			if ($this->getOwner()->FACTION) {
-				$faction = $this->getOwner()->FACTION->getPlayerFaction($name);
-				if (count($faction) == 0)
-					$faction = $this->getOwner()->noF;
-			}
+			$item_id = $player->getItemInHand()->getId();
+			$item_meta = $player->getItemInHand()->getDamage();
 			
-			$item = $player->getItemInHand()->getId() . ":" . $player->getItemInHand()->getDamage();
 			$time = date($this->getOwner()->TIME_FORMAT);
+			$load = $this->getOwner()->getServer()->getTickUsage();
+			$tps = $this->getOwner()->getServer()->getTicksPerSecond();
 			
 			$online = count($this->getOwner()->getServer()->getOnlinePlayers());
 			$max_online = $this->getOwner()->getServer()->getMaxPlayers();
 			
-			$text = str_replace(array("%NICK%", "%MONEY%", "%FACTION%", "%ITEM%", "%TIME%", "%ONLINE%", "%MAX_ONLINE%", "%X%", "%Y%", "%Z%"), array($name, @$money, @$faction, $item, $time, $online, $max_online, $x, $y, $z), $this->getOwner()->FORMAT);
+			$text = str_replace(array("%NICK%", "%MONEY%", "%FACTION%", "%ITEM_ID%", "%ITEM_META%", "%TIME%", "%ONLINE%", "%MAX_ONLINE%", "%X%", "%Y%", "%Z%", "%IP%", "%PP_GROUP%", "%TAG%", "%LOAD%", "%TPS%", "%KILLS%", "%DEATHS%", "%LEVEL%"), array($name, $money, $faction, $item_id, $item_meta, $time, $online, $max_online, $x, $y, $z, $ip, $ppg, $tag, $load, $tps, $kills, $deaths, $level), $this->getOwner()->FORMAT);
 			
 			if ($this->getOwner()->popup)
 				$player->sendPopup($text);
@@ -98,5 +142,16 @@ class hotBAR extends PluginTask {
 			return $this->getOwner()->MONEY->getMoney($player);
 		else
 			return "§c" . "NoEcoPlug";
+	}
+	
+	public function getFaction($player) {
+		if ($this->getOwner()->FACTION) {
+			$f = $this->getOwner()->FACTION->getPlayerFaction($player);
+			if (count($f) == 0)
+				$f = $this->getOwner()->noF;
+			return $f;
+		} else {
+			return "§c" . "NoFactPlug";
+		}
 	}
 }
