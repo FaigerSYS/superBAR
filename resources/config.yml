@@ -1,6 +1,6 @@
 #superBAR config. Plugin by FaigerSYS
 #For you :3 "§§§"
-ver: 2
+ver: 3
 #DON'T CHANGE THIS!!!
 
 #Hotbar format
@@ -59,3 +59,6 @@ time-format: "H:i:s"
 
 #This will be displayed (in %FACTION%) if the player does not have a faction
 no-faction: "NoFaction"
+
+#Custom fix (if you got error from this plugin every second) (disable %PP_GROUP%) (true/false)
+enable-fix: false
