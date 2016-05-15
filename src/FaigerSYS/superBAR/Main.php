@@ -71,7 +71,7 @@ class Main extends PluginBase {
 			$this->getLogger()->info(CLR::GREEN . "FactionsPro OK!");
 		}
 		
-		if ($this->getServer()->getPluginManager()->getPlugin("PurePerms")) {
+		if ($this->getServer()->getPluginManager()->getPlugin("PurePerms") && !$this->config->get("enable-fix")) {
 			$this->PP = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
 			$this->getLogger()->info(CLR::GREEN . "PurePerms OK!");
 		}
@@ -97,7 +97,7 @@ class hotBAR extends PluginTask {
 			$tag = $player->getNameTag();
 			
 			if ($this->getOwner()->PP)
-				$ppg = $this->PP->getUserDataMgr()->getGroup($this->PP->getPlayer($name));
+				$ppg = $this->getOwner()->PP->getUserDataMgr()->getGroup($this->getOwner()->PP->getPlayer($name));
 			else
 				$ppg = "§c" . "NoPPplug";
 			
