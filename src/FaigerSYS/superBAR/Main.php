@@ -16,7 +16,7 @@ class Main extends PluginBase {
 	public $FORMAT, $TIME_FORMAT;
 	
 	public function onEnable() {
-		$this->getLogger()->info(CLR::GOLD . 'superBAR loading...');
+		$this->getLogger()->info(CLR::GOLD . 'superBAR загружается...');
 		
 		@mkdir($this->getDataFolder());
 		if (!file_exists($this->getDataFolder() . 'config.yml'))
@@ -68,12 +68,12 @@ class Main extends PluginBase {
 		
 		$ticks = $this->config->get('timer');
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new hotBAR($this), $ticks);
-		$this->getLogger()->info(CLR::GOLD . 'superBAR by FaigerSYS enabled!');
+		$this->getLogger()->info(CLR::GOLD . 'superBAR успешно включен!');
 	}
 	
 	public function onCommand(CommandSender $sender, Command $cmd, $lbl, array $args){
 		if($cmd->getName() == 'superbar') {
-			$sender->sendMessage("§b[§esuper§6BAR§b] §aWill be soon...))");
+			$sender->sendMessage("§b[§esuper§6BAR§b] §aСкоро будет...))");
 		}
 	}
 }
@@ -88,8 +88,6 @@ class hotBAR extends PluginTask {
 		
 		foreach ($this->getOwner()->getServer()->getOnlinePlayers() as $player) {
 			$name = $player->getName();
-			$ip = $player->getAddress();
-			$tag = $player->getNameTag();
 			
 			if ($this->getOwner()->PP)
 				$ppg = $this->getOwner()->PP->getUserDataMgr()->getData($player)['group'];
@@ -103,19 +101,7 @@ class hotBAR extends PluginTask {
 				$kills = $deaths =  '§c' . 'NoPlug';
 			}
 			
-			$money = $this->getMoney(strtolower($name));
-			$faction = $this->getFaction($name);
-			
-			$x = intval($player->x);
-			$y = intval($player->y);
-			$z = intval($player->z);
-			$level = $player->getLevel()->getName();
-			
-			$item_id = $player->getInventory()->getItemInHand()->getId();
-			$item_meta = $player->getInventory()->getItemInHand()->getDamage();
-			
-			$text = str_replace(array('%NICK%', '%MONEY%', '%FACTION%', '%ITEM_ID%', '%ITEM_META%', '%TIME%', '%ONLINE%', '%MAX_ONLINE%', '%X%', '%Y%', '%Z%', '%IP%', '%PP_GROUP%', '%TAG%', '%LOAD%', '%TPS%', '%KILLS%', '%DEATHS%', '%LEVEL%'), array($name, $money, $faction, $item_id, $item_meta, $time, $online, $max_online, $x, $y, $z, $ip, $ppg, $tag, $load, $tps, $kills, $deaths, $level), $this->getOwner()->FORMAT);
-			
+			$text = str_replace(array('%NICK%', '%MONEY%', '%FACTION%', '%ITEM_ID%', '%ITEM_META%', '%TIME%', '%ONLINE%', '%MAX_ONLINE%', '%X%', '%Y%', '%Z%', '%IP%', '%PP_GROUP%', '%TAG%', '%LOAD%', '%TPS%', '%KILLS%', '%DEATHS%', '%LEVEL%'), array($name, $this->getMoney(strtolower($name)), $this->getFaction($name), $player->getInventory()->getItemInHand()->getId(), $player->getInventory()->getItemInHand()->getDamage(), $time, $online, $max_online, intval($player->x), intval($player->y), intval($player->z), $player->getAddress(), $ppg, $player->getNameTag(), $load, $tps, $kills, $deaths, $player->getLevel()->getName()), $this->getOwner()->FORMAT);
 			if ($this->getOwner()->popup)
 				$player->sendPopup($text);
 			else
