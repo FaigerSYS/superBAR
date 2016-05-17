@@ -6,6 +6,8 @@ use pocketmine\utils\Config;
 use pocketmine\plugin\PluginBase;
 use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as CLR;
+use pocketmine\command\CommandSender;
+use pocketmine\command\Command;
 
 class Main extends PluginBase {
 	
@@ -67,6 +69,12 @@ class Main extends PluginBase {
 		$ticks = $this->config->get('timer');
 		$this->getServer()->getScheduler()->scheduleRepeatingTask(new hotBAR($this), $ticks);
 		$this->getLogger()->info(CLR::GOLD . 'superBAR by FaigerSYS enabled!');
+	}
+	
+	public function onCommand(CommandSender $sender, Command $cmd, $lbl, array $args){
+		if($cmd->getName() == 'superbar') {
+			$sender->sendMessage("§b[§esuper§6BAR§b] §aWill be soon...))");
+		}
 	}
 }
 
