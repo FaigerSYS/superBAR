@@ -5,3 +5,13 @@ api: [1.13.0, 2.0.0]
 load: STARTUP
 author: FaigerSYS
 description: "Just good and customizable hotbar"
+
+commands:
+ superbar:
+  description: "Commands!!! [Non-useful yet]"
+  permission: superbar
+
+permissions:
+ superbar:
+  default: superbar
+  description: "Perm :P"
