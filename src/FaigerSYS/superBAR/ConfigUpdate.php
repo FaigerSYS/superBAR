@@ -14,7 +14,7 @@ class ConfigUpdate extends PluginBase {
 			$this->u2($main);
 			$main->getLogger()->info(CLR::RED . 'UPDATED!!!');
 		} elseif ($ver == 2 || $ver == 3) {
-			$main->getLogger()->info(CLR::RED . 'UPDATING CONFIG [ $ver->4 ]...');
+			$main->getLogger()->info(CLR::RED . "UPDATING CONFIG [ $ver->4 ]...");
 			$this->u2($main);
 			$main->getLogger()->info(CLR::RED . 'UPDATED!!!');
 		}
