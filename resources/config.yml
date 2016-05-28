@@ -39,7 +39,7 @@ type: "popup"
 
 #Tip:
 # MCPE 0.14.2 does not support tips. So, I recommend using popup.
-# 'popup' is too low. BUT since version 0.14.2, 'popup' is too high like 'tip'
+# 'popup' is too low. BUT since version 0.14.2, 'popup' is high like 'tip'
 
 #Timer (every *setted parameter* ticks sends to player hotbar)
 timer: 10
