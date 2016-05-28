@@ -1,145 +1,70 @@
 <?PHP
 namespace FaigerSYS\superBAR;
 
-use FaigerSYS\superBAR\ConfigUpdate;
 use pocketmine\utils\Config;
 use pocketmine\plugin\PluginBase;
-use pocketmine\scheduler\PluginTask;
 use pocketmine\utils\TextFormat as CLR;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
 
-class Main extends PluginBase {
-	
-	public $config, $ecoType, $noF, $popup;
-	public $MONEY, $FACTION, $PP, $KD;
-	public $FORMAT, $TIME_FORMAT;
+use FaigerSYS\superBAR\PL;
+
+class Main extends PluginBase { 
+	public $hotbar, $conf_provider, $task, $prefix, $no_perm;
 	
 	public function onEnable() {
-		$this->getLogger()->info(CLR::GOLD . 'superBAR loading...');
-		
-		@mkdir($this->getDataFolder());
-		if (!file_exists($this->getDataFolder() . 'config.yml'))
-			file_put_contents($this->getDataFolder() . 'config.yml', $this->getResource('config.yml'));
-		$this->config = new Config($this->getDataFolder() . 'config.yml', Config::YAML);
-		$tmp = new ConfigUpdate;
-		$tmp->update($this);
-		
-		$this->FORMAT = $this->config->get('hot-format');
-		$this->TIME_FORMAT = $this->config->get('time-format');
-		$this->noF = $this->config->get('no-faction');
-		
-		if ($this->config->get('type') !== 'popup')
-			$this->popup = false;
-		else
-			$this->popup = true;
-		
-		$lvl = intval($this->config->get('text-offset-level'));
-		if ($lvl < 0) {
-			$n1 = str_pad('', -$lvl, '  ');
-			$n2 = $n1 . "\n";
-			$this->FORMAT = $this->FORMAT . $n1;
-			$this->FORMAT = str_replace("\n", $n2, $this->FORMAT);
-		} elseif ($lvl > 0) {
-			$n1 = str_pad('', $lvl, '  ');
-			$n2 = "\n" . $n1;
-			$this->FORMAT = $n1 . $this->FORMAT;
-			$this->FORMAT = str_replace("\n", $n2, $this->FORMAT);
-		}
-		
-		if ($this->MONEY = $this->getServer()->getPluginManager()->getPlugin('EconomyAPI')) {
-			$this->ecoType = 1;
-			$this->getLogger()->info(CLR::GREEN . 'EconomyAPI OK!');
-		} elseif ($this->MONEY = $this->getServer()->getPluginManager()->getPlugin('PocketMoney')) {
-			$this->ecoType = 2;
-			$this->getLogger()->info(CLR::GREEN . 'PocketMoney OK!');
-		}
-		
-		if ($this->FACTION = $this->getServer()->getPluginManager()->getPlugin('FactionsPro'))
-			$this->getLogger()->info(CLR::GREEN . 'FactionsPro OK!');
-		
-		if ($this->PP = $this->getServer()->getPluginManager()->getPlugin('PurePerms'))
-			$this->getLogger()->info(CLR::GREEN . 'PurePerms OK!');
-		
-		if ($this->KD = $this->getServer()->getPluginManager()->getPlugin('KillChat'))
-			$this->getLogger()->info(CLR::GREEN . 'KillChat OK!');
-		elseif ($this->KD = $this->getServer()->getPluginManager()->getPlugin('ScorePvP'))
-			$this->getLogger()->info(CLR::GREEN . 'ScorePvP OK!');
-		
-		$ticks = $this->config->get('timer');
-		$this->getServer()->getScheduler()->scheduleRepeatingTask(new hotBAR($this), $ticks);
-		$this->getLogger()->info(CLR::GOLD . 'superBAR by FaigerSYS enabled!');
+		$this->getLogger()->info(CLR::GOLD . 'superBAR will be enabled after the complete server load...');
+		$pl = new PL($this);
+		$pl->main = $this;
+		$task = $this->getServer()->getScheduler()->scheduleRepeatingTask($pl, 1);
+		$pl->id = $task->getTaskId();
+	}
+	
+	public function dataLoader($reload = false) {
+		if ($reload)
+			$this->getServer()->getScheduler()->cancelTask($this->task->getTaskId());
+		$ticks = $this->conf_provider->loadData();
+		$this->task = $this->getServer()->getScheduler()->scheduleRepeatingTask($this->hotbar, $ticks);
 	}
 	
 	public function onCommand(CommandSender $sender, Command $cmd, $lbl, array $args){
 		if($cmd->getName() == 'superbar') {
-			$sender->sendMessage("§b[§esuper§6BAR§b] §aWill be soon...))");
-		}
-	}
-}
-
-class hotBAR extends PluginTask {
-	public function onRun($tick) {
-		$time = date($this->getOwner()->TIME_FORMAT);
-		$load = $this->getOwner()->getServer()->getTickUsage();
-		$tps = $this->getOwner()->getServer()->getTicksPerSecond();
-		$online = count($this->getOwner()->getServer()->getOnlinePlayers());
-		$max_online = $this->getOwner()->getServer()->getMaxPlayers();
-		
-		foreach ($this->getOwner()->getServer()->getOnlinePlayers() as $player) {
-			$name = $player->getName();
-			$ip = $player->getAddress();
-			$tag = $player->getNameTag();
-			
-			if ($this->getOwner()->PP)
-				$ppg = $this->getOwner()->PP->getUserDataMgr()->getData($player)['group'];
-			else
-				$ppg = '§c' . 'NoPPplug';
-			
-			if ($this->getOwner()->KD) {
-				$kills = $this->getOwner()->KD->getKills($name);
-				$deaths = $this->getOwner()->KD->getDeaths($name);
+			if (count($args) == 0) {
+				$sender->sendMessage(
+					$this->prefix . "Version " . $this->getDescription()->getVersion() . "\n" . 
+					$this->prefix . 'Commands list: ' . CLR::DARK_GREEN . '/sb help'
+				);
+			} elseif ($args[0] == 'help') {
+				if ($sender->hasPermission('superbar.help')) {
+					$sender->sendMessage(
+						$this->prefix . "Commands:\n" .
+						CLR::DARK_GREEN . '/sb reload' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "reload the hotbar settings"
+						//CLR::DARK_GREEN . '/sb example' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "somesing"
+					);
+				} else
+					$sender->sendMessage($this->prefix . $this->no_perm);
+			} elseif ($args[0] == 'reload') {
+				if ($sender->hasPermission('superbar.reload')) {
+					$this->dataLoader(true);
+					$sender->sendMessage($this->prefix . 'Successfully reloaded!');
+				} else
+					$sender->sendMessage($this->prefix . $this->no_perm);
+			} elseif ($args[0] == 'addgroup') {
+				if ($sender->hasPermission('superbar.addgroup')) {
+					
+				} else
+					$sender->sendMessage($this->prefix . $this->no_perm);
 			} else {
-				$kills = $deaths =  '§c' . 'NoPlug';
+				$sender->sendMessage($this->prefix . CLR::RED . 'Wrong command!' . CLR::DARK_GREEN . ' /sb help ' . CLR::RED . 'for list of commands.');
 			}
-			
-			$money = $this->getMoney(strtolower($name));
-			$faction = $this->getFaction($name);
-			
-			$x = intval($player->x);
-			$y = intval($player->y);
-			$z = intval($player->z);
-			$level = $player->getLevel()->getName();
-			
-			$item_id = $player->getInventory()->getItemInHand()->getId();
-			$item_meta = $player->getInventory()->getItemInHand()->getDamage();
-			
-			$text = str_replace(array('%NICK%', '%MONEY%', '%FACTION%', '%ITEM_ID%', '%ITEM_META%', '%TIME%', '%ONLINE%', '%MAX_ONLINE%', '%X%', '%Y%', '%Z%', '%IP%', '%PP_GROUP%', '%TAG%', '%LOAD%', '%TPS%', '%KILLS%', '%DEATHS%', '%LEVEL%'), array($name, $money, $faction, $item_id, $item_meta, $time, $online, $max_online, $x, $y, $z, $ip, $ppg, $tag, $load, $tps, $kills, $deaths, $level), $this->getOwner()->FORMAT);
-			
-			if ($this->getOwner()->popup)
-				$player->sendPopup($text);
-			else
-				$player->sendTip($text);
 		}
 	}
 	
-	public function getMoney($player) {
-		if ($this->getOwner()->ecoType == 1)
-			return $this->getOwner()->MONEY->myMoney($player);
-		elseif ($this->getOwner()->ecoType == 2)
-			return $this->getOwner()->MONEY->getMoney($player);
-		else
-			return '§c' . 'NoEcoPlug';
-	}
-	
-	public function getFaction($player) {
-		if ($this->getOwner()->FACTION) {
-			$f = $this->getOwner()->FACTION->getPlayerFaction($player);
-			if (count($f) == 0)
-				$f = $this->getOwner()->noF;
-			return $f;
-		} else {
-			return '§c' . 'NoFactPlug';
-		}
+	public function getPlug($name) {
+		if ($plug = $this->getServer()->getPluginManager()->getPlugin($name)) {
+			if ($plug->isEnabled()) {
+				return $plug;
+			} else return false;
+		} else return false;
 	}
 }
