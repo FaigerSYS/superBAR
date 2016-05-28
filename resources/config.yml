@@ -35,6 +35,7 @@ text-offset-level: 0
 # Average value (e.g. 1) - to right side
 
 #Type of hotbar (popup/tip)
+#Use Tip in 0.14.1, Crash in 0.14.2+
 type: "popup"
 
 #Tip:
