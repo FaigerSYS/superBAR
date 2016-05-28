@@ -1,17 +1,24 @@
 name: superBAR
 main: FaigerSYS\superBAR\Main
-version: 1.3.5
+version: 1.4.10
 api: [1.13.0, 2.0.0]
-load: STARTUP
+load: POSTWORLD
 author: FaigerSYS
 description: "Just good and customizable hotbar"
 
 commands:
  superbar:
-  description: "Commands!!! [Non-useful yet]"
+  description: "superBAR command"
+  aliases: [sb, supbar, sbar]
   permission: superbar
 
 permissions:
  superbar:
-  default: superbar
-  description: "Perm :P"
+  default: true
+  description: "Perm to use commands"
+ superbar.help:
+  default: op
+  description: "Perm to see superBAR help"
+ superbar.reload:
+  default: op
+  description: "Perm to reload settings"
