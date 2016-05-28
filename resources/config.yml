@@ -1,32 +1,31 @@
 #superBAR config. Plugin by FaigerSYS
 #For you :3 "§§§"
-ver: 4
+ver: 6
 #DON'T CHANGE THIS!!!
 
-#Hotbar format
+#Hotbar format. For color use §.
 hot-format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
 
 #Tip:
 # %NICK% - name of player
-# %MONEY% - count of player's money
-# %ITEM_ID% - ID of item in hand
-# %ITEM_META% - META/DAMAGE of item in hand
-# %FACTION% - player's faction
-# %TIME% - time (timezone you can set at "/path_to_server/bin/php*/bin/php.ini", param "date.timezone")
-#   List of timezones: https://secure.php.net/manual/ru/timezones.php
+# %MONEY% - count of player's money (EconomyAPI and PocketMoney)
+# %ITEM_ID% / %ITEM_META% - ID/{META/DAMAGE} of item in hand
+# %FACTION% - player's faction (only FactionsPro)
+# %TIME% - time
+#   How to set a different timezone - see below
 # %ONLINE% - how many players now on server
 # %MAX_ONLINE% - max. online
 # %X% / %Y% / %Z% - get X/Y/Z-coordinates of player
 # %IP% - IP of player
 # %PP_GROUP% - PurePerms group of player
 # %TAG% - player's tag (text above player's head)
-# %LOAD% - load of server (0-100 ???)
+# %LOAD% - load of server (0-100 %)
 # %TPS% - TPS of server
 # %KILLS% / %DEATHS% - count of player's kills/deaths
 #   NEED KillChat. If you have installed CustomChat, install KillChat extension: https://forums.pocketmine.net/plugins/killchat-extension-cc.916/
-#   If not, or if there are problems, install modified version of KillChat: https://github.com/FaigerSYS/superBAR_additionally/raw/master/KillChat_MOD.phar
+#   If not, or if there are any problems, install modified version of KillChat: https://github.com/FaigerSYS/superBAR_additionally/raw/master/KillChat_MOD.phar
 # %LEVEL% - name of player's current world/level
-# \n - new line
+# \n - new line. WARNING! \n is not the same as /n
 
 #The level of the text offset
 text-offset-level: 0
@@ -40,6 +39,7 @@ type: "popup"
 
 #Tip:
 # MCPE 0.14.2 does not support tips. So, I recommend using popup.
+# 'popup' is too low. BUT since version 0.14.2, 'popup' is too high like 'tip'
 
 #Timer (every *setted parameter* ticks sends to player hotbar)
 timer: 10
@@ -59,3 +59,11 @@ time-format: "H:i:s"
 
 #This will be displayed (in %FACTION%) if the player does not have a faction
 no-faction: "NoFaction"
+
+#Timezone (for %TIME%)
+timezone: false
+
+#Tip:
+# false - without changes ; "America/New_York" - New York time
+# List of another timezones: https://secure.php.net/manual/en/timezones.php
+# If not working, go to /path_to_server/bin/php*/bin/php.ini and add/set parameter 'date.timezone' to your timezone
