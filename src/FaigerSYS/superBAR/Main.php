@@ -1,9 +1,10 @@
-<?PHP
+<?php
+
 namespace FaigerSYS\superBAR;
 
 use pocketmine\utils\Config;
 use pocketmine\plugin\PluginBase;
-use pocketmine\utils\TextFormat as CLR;
+use pocketmine\utils\TextFormat as C;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
 
@@ -13,7 +14,7 @@ class Main extends PluginBase {
 	public $hotbar, $conf_provider, $task, $prefix, $no_perm;
 	
 	public function onEnable() {
-		$this->getLogger()->info(CLR::GOLD . 'superBAR will be enabled after the complete server load...');
+		$this->getLogger()->info(C::GOLD . 'superBAR will be enabled after complete server load...');
 		$pl = new PL($this);
 		$pl->main = $this;
 		$task = $this->getServer()->getScheduler()->scheduleRepeatingTask($pl, 1);
@@ -32,14 +33,13 @@ class Main extends PluginBase {
 			if (count($args) == 0) {
 				$sender->sendMessage(
 					$this->prefix . "Version " . $this->getDescription()->getVersion() . "\n" . 
-					$this->prefix . 'Commands list: ' . CLR::DARK_GREEN . '/sb help'
+					$this->prefix . 'Commands list: ' . C::DARK_GREEN . '/sb help'
 				);
 			} elseif ($args[0] == 'help') {
 				if ($sender->hasPermission('superbar.help')) {
 					$sender->sendMessage(
 						$this->prefix . "Commands:\n" .
-						CLR::DARK_GREEN . '/sb reload' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "reload the hotbar settings"
-						//CLR::DARK_GREEN . '/sb example' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "somesing"
+						CLR::DARK_GREEN . '/sb reload' . C::BLUE . ' - ' . C::DARK_AQUA . "reload the hotbar settings"
 					);
 				} else
 					$sender->sendMessage($this->prefix . $this->no_perm);
@@ -55,7 +55,7 @@ class Main extends PluginBase {
 				} else
 					$sender->sendMessage($this->prefix . $this->no_perm);
 			} else {
-				$sender->sendMessage($this->prefix . CLR::RED . 'Wrong command!' . CLR::DARK_GREEN . ' /sb help ' . CLR::RED . 'for list of commands.');
+				$sender->sendMessage($this->prefix . CLR::RED . 'Wrong command!' . CLR::DARK_GREEN . ' /sb help ' . CLR::RED . 'for a list of commands.');
 			}
 		}
 	}
