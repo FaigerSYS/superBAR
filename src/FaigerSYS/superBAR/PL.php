@@ -1,10 +1,11 @@
-<?PHP
+<?php
+
 namespace FaigerSYS\superBAR;
 
 use pocketmine\scheduler\PluginTask;
 use FaigerSYS\superBAR\ConfigProvider;
 use FaigerSYS\superBAR\hotBAR;
-use pocketmine\utils\TextFormat as CLR;
+use pocketmine\utils\TextFormat as C;
 
 class PL extends PluginTask {
 	public $main, $id;
@@ -12,11 +13,11 @@ class PL extends PluginTask {
 	public function onRun($tick) {
 		$main = $this->main;
 		
-		$main->getLogger()->info(CLR::GOLD . 'superBAR loading...');
+		$main->getLogger()->info(C::GOLD . 'superBAR loading...');
 		
 		$mgr = $main->getServer()->getPluginManager();
-		$main->prefix = CLR::AQUA . '[' . CLR::YELLOW . 'super' . CLR::GOLD . 'BAR' . CLR::AQUA . '] ' . CLR::GRAY;
-		$main->no_perm = CLR::RED . "You don't have permission to use this command...";
+		$main->prefix = C::AQUA . '[' . CLR::YELLOW . 'super' . C::GOLD . 'BAR' . CLR::AQUA . '] ' . CLR::GRAY;
+		$main->no_perm = C::RED . "You don't have permission to use this command!";
 		
 		@mkdir($main->getDataFolder());
 		if (!file_exists($main->getDataFolder() . 'config.yml'))
@@ -30,24 +31,24 @@ class PL extends PluginTask {
 		
 		if ($main->hotbar->CASH = $main->getPlug('EconomyAPI')) {
 			$main->hotbar->eT = 1;
-			$main->getLogger()->info(CLR::GREEN . 'EconomyAPI OK!');
+			$main->getLogger()->info(C::GREEN . 'EconomyAPI OK');
 		} elseif ($main->hotbar->CASH = $main->getPlug('PocketMoney')) {
 			$main->hotbar->eT = 2;
-			$main->getLogger()->info(CLR::GREEN . 'PocketMoney OK!');
+			$main->getLogger()->info(C::GREEN . 'PocketMoney OK');
 		}
 		
 		if ($main->hotbar->FACT = $main->getPlug('FactionsPro'))
-			$main->getLogger()->info(CLR::GREEN . 'FactionsPro OK!');
+			$main->getLogger()->info(CLR::GREEN . 'FactionsPro OK');
 		
 		if ($main->hotbar->PP = $main->getPlug('PurePerms')) {
 			$main->hotbar->PP_v = substr($main->hotbar->PP->getDescription()->getVersion(), 0, 3);
-			$main->getLogger()->info(CLR::GREEN . 'PurePerms OK!');
+			$main->getLogger()->info(CLR::GREEN . 'PurePerms OK');
 		}
 		
 		if ($main->hotbar->KD = $main->getPlug('KillChat'))
-			$main->getLogger()->info(CLR::GREEN . 'KillChat OK!');
+			$main->getLogger()->info(CLR::GREEN . 'KillChat OK');
 		elseif ($main->hotbar->KD = $main->getPlug('ScorePvP'))
-			$main->getLogger()->info(CLR::GREEN . 'ScorePvP OK!');
+			$main->getLogger()->info(CLR::GREEN . 'ScorePvP OK');
 		
 		$main->dataLoader();
 		
