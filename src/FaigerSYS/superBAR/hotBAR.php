@@ -1,5 +1,7 @@
-<?PHP
+<?php
+
 namespace FaigerSYS\superBAR;
+
 use pocketmine\scheduler\PluginTask;
 
 class hotBAR extends PluginTask {
@@ -26,25 +28,25 @@ class hotBAR extends PluginTask {
 					else
 						$ppg = $a = $this->PP->getUserDataMgr()->getData($p)['group'];
 				} else
-					$ppg = '§cNoPPplug';
+					$ppg = '§cNoPPpl';
 				
 				if ($this->FACT) {
 					if (count($fact = $this->FACT->getPlayerFaction($name)) == 0)
 						$fact = $this->noF[$a];
-				} else $fact = '§cNoFactPlug';
+				} else $fact = '§cNoFactpl';
 				
 				if ($this->eT == 1)
 					$cash = $this->CASH->myMoney($name);
 				elseif ($this->eT == 2)
 					$cash = $this->CASH->getMoney($name);
 				else
-					$cash = '§cNoEcoPlug';
+					$cash = '§cNoEcopl';
 				
 				if ($this->KD) {
 					$kll = $this->KD->getKills($name);
 					$dth = $this->KD->getDeaths($name);
 				} else
-					$kll = $dth =  '§cNoPlug';
+					$kll = $dth =  '§cNoPl';
 				
 				if ($p->getInventory() != null) {
 					$id = $p->getInventory()->getItemInHand()->getId();
@@ -56,8 +58,6 @@ class hotBAR extends PluginTask {
 				$text = str_replace(array('%NICK%', '%MONEY%', '%FACTION%', '%ITEM_ID%', '%ITEM_META%', '%TIME%', '%ONLINE%', '%MAX_ONLINE%', '%X%', '%Y%', '%Z%', '%IP%', '%PP_GROUP%', '%TAG%', '%LOAD%', '%TPS%', '%KILLS%', '%DEATHS%', '%LEVEL%'), array($name, $cash, $fact, $id, $mt, $time, $plon, $mxon, intval($p->x), intval($p->y), intval($p->z), $p->getAddress(), $ppg, $p->getNameTag(), $load, $tps, $kll, $dth, $p->getLevel()->getName()), $this->FRMT[$a]);
 				if ($this->ppup[$a])
 					$p->sendPopup($text);
-				else
-					$p->sendTip($text);
 			}
 		}
 	}
