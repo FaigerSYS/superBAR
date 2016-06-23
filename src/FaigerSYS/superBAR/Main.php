@@ -9,7 +9,7 @@ use pocketmine\command\Command;
 
 use FaigerSYS\superBAR\PL;
 
-class Main extends PluginBase { 
+class Main extends PluginBase {
 	public $hotbar, $conf_provider, $task, $prefix, $no_perm;
 	
 	public function onEnable() {
@@ -55,7 +55,7 @@ class Main extends PluginBase {
 				} else
 					$sender->sendMessage($this->prefix . $this->no_perm);
 			} else {
-				$sender->sendMessage($this->prefix . CLR::RED . 'Wrong command!' . CLR::DARK_GREEN . ' /sb help ' . CLR::RED . 'for list of commands.');
+				$sender->sendMessage($this->prefix . CLR::RED . 'Wrong command!' . CLR::DARK_GREEN . ' /sb help ' . CLR::RED . 'for a list of commands.');
 			}
 		}
 	}
