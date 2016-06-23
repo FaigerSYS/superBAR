@@ -1,10 +1,10 @@
 name: superBAR
 main: FaigerSYS\superBAR\Main
-version: 1.4.10
+version: 1.5.0
 api: [1.13.0, 2.0.0]
 load: POSTWORLD
 author: FaigerSYS
-description: "Just good and customizable hotbar"
+description: "Just good and customizable HUD"
 
 commands:
  superbar:
