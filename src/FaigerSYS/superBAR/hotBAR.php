@@ -3,7 +3,7 @@ namespace FaigerSYS\superBAR;
 use pocketmine\scheduler\PluginTask;
 
 class hotBAR extends PluginTask {
-	public $serv, $eT, $noF, $ppup, $CASH, $FACT, $FT_v, $GP, $PP, $PP_v, $KD, $FRMT, $PFM, $TIME_FRMT;
+	public $serv, $eT, $noF, $ppup, $CASH, $FACT, $FT_v, $GP, $GT, $PP, $PP_v, $KD, $FRMT, $PFM, $TIME_FRMT;
 	public $ADNS = array('%NICK%', '%MONEY%', '%FACTION%', '%ITEM_ID%', '%ITEM_META%', '%TIME%', '%ONLINE%', '%MAX_ONLINE%', '%X%', '%Y%', '%Z%', '%IP%', '%PP_GROUP%', '%TAG%', '%LOAD%', '%TPS%', '%KILLS%', '%DEATHS%', '%LEVEL%', '%PING%', '%GT%', '%AGT%');
 	public $ADNE = array();
 	public $VR = array();
