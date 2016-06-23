@@ -35,6 +35,19 @@ class ConfigProvider {
 		
 		$this->main->hotbar->ddts($data['timezone']);
 		
+		$addonFiles = scandir($this->main->getDataFolder() . 'addons');
+		foreach ($addonFiles as $fileName) {
+			if (preg_match('/\.(php)/', $fileName)) {
+				$this->createVariable = '';
+				require($this->main->getDataFolder() . 'addons/' . $fileName);
+				$str = $onStart();
+				array_push($this->main->hotbar->ADNS, $str);
+				array_push($this->main->hotbar->ADNE, $this->main->getDataFolder() . 'addons/' . $fileName);
+				$this->main->hotbar->VR[$this->main->getDataFolder() . 'addons/' . $fileName] = $this->createVariable;
+				$this->main->getLogger()->info(CLR::YELLOW . 'Loaded addon \'' . CLR::AQUA . $fileName . CLR::YELLOW . '\'! ( ' . $str . ' )');
+			}
+		}
+		
 		if ($this->main->hotbar->PP) {
 			$this->pp_provider();
 			$all = $this->pp_config->getAll();
@@ -84,8 +97,8 @@ class ConfigProvider {
 	
 	public function update() {
 		$ver = $this->config->get('ver');
-		if ($ver != 6) {
-			$this->main->getLogger()->info(CLR::RED . "UPDATING CONFIG [ $ver->6 ]...");
+		if ($ver != 7) {
+			$this->main->getLogger()->info(CLR::RED . "UPDATING CONFIG [ $ver->7 ]...");
 			$this->def_provider();
 			$this->main->getLogger()->info(CLR::RED . 'UPDATED!!!');
 			return true;
@@ -102,19 +115,28 @@ class ConfigProvider {
 		$all['hot-format'] = str_replace('%ITEM%', '%ITEM_ID%:%ITEM_META%', $all['hot-format']);
 		file_put_contents($this->main->getDataFolder() . 'config.yml', $this->main->getResource('config.yml'));
 		
+		if (!isset($all['text-offset-level']))
+			$all['text-offset-level'] = 0;
+		if (!isset($all['timezone']))
+			$all['timezone'] = 'false';
+		else {
+			if (!$all['timezone'])
+				$all['timezone'] = 'false';
+			else
+				$all['timezone'] = '"' . $all['timezone'] . '"';
+		}
+		
 		if ($k)
 			$all[$k] = $v;
 		
-		if (!isset($all['text-offset-level']))
-			$all['text-offset-level'] = 0;
-		
 		$conf = file($this->main->getDataFolder() . 'config.yml');
-		$conf[6] = 'hot-format: "' . str_replace("\n", '\n', $all['hot-format']) . "\"\n";
-		$conf[30] = 'text-offset-level: ' . $all['text-offset-level'] . "\n";
-		$conf[37] = 'type: "' . $all['type'] . "\"\n";
-		$conf[44] = 'timer: ' . $all['timer'] . "\n";
-		$conf[51] = 'time-format: "' . $all['time-format'] . "\"\n";
-		$conf[60] = 'no-faction: "' . $all['no-faction'] . "\"\n";
+		$conf[5] = 'hot-format: "' . str_replace("\n", '\n', $all['hot-format']) . "\"\n";
+		$conf[36] = 'text-offset-level: ' . $all['text-offset-level'] . "\n";
+		$conf[42] = 'type: "' . $all['type'] . "\"\n";
+		$conf[48] = 'timer: ' . $all['timer'] . "\n";
+		$conf[54] = 'time-format: "' . $all['time-format'] . "\"\n";
+		$conf[62] = 'no-faction: "' . $all['no-faction'] . "\"\n";
+		$conf[65] = 'timezone: ' . $all['timezone'] . "\n";
 		file_put_contents($this->main->getDataFolder() . 'config.yml', join('', $conf));
 		
 		$this->config->reload();
