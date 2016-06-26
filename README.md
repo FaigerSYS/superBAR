@@ -1,7 +1,7 @@
 # superBAR
 #####Just good and customizable hotbar for PocketMine-based servers
 
-To download, look [there](https://github.com/FaigerSYS/superBAR/releases).
+To download, look [there](http://adf.ly/1bac7e).
 
 All setup instructions you can see in the [config](https://github.com/FaigerSYS/superBAR/blob/master/resources/config.yml)
 
