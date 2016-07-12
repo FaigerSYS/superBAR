@@ -1,12 +1,12 @@
-<?PHP
+<?php
+
 namespace FaigerSYS\superBAR;
 
-use pocketmine\utils\Config;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as CLR;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
-
 use FaigerSYS\superBAR\PL;
 
 class Main extends PluginBase {
@@ -38,15 +38,14 @@ class Main extends PluginBase {
 				if ($sender->hasPermission('superbar.help')) {
 					$sender->sendMessage(
 						$this->prefix . "Commands:\n" .
-						CLR::DARK_GREEN . '/sb reload' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "reload the hotbar settings"
-						//CLR::DARK_GREEN . '/sb example' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "somesing"
+						CLR::DARK_GREEN . '/sb reload' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "reload the superbar settings!"
 					);
 				} else
 					$sender->sendMessage($this->prefix . $this->no_perm);
 			} elseif ($args[0] == 'reload') {
 				if ($sender->hasPermission('superbar.reload')) {
 					$this->dataLoader(true);
-					$sender->sendMessage($this->prefix . 'Successfully reloaded!');
+					$sender->sendMessage($this->prefix . "Successfully reloaded!");
 				} else
 					$sender->sendMessage($this->prefix . $this->no_perm);
 			} elseif ($args[0] == 'addgroup') {
