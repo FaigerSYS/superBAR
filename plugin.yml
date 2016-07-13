@@ -1,6 +1,6 @@
 name: superBAR
 main: FaigerSYS\superBAR\Main
-version: 1.5.0
+version: 1.5.1
 api: [1.13.0, 2.0.0]
 load: POSTWORLD
 author: FaigerSYS
@@ -10,15 +10,28 @@ commands:
  superbar:
   description: "superBAR command"
   aliases: [sb, supbar, sbar]
-  permission: superbar
+  permission: 'superbar.cmd'
 
 permissions:
  superbar:
-  default: true
-  description: "Perm to use commands"
- superbar.help:
   default: op
-  description: "Perm to see superBAR help"
- superbar.reload:
-  default: op
-  description: "Perm to reload settings"
+  description: "Use all features (commands and other) of superBAR"
+  children:
+   superbar.use:
+    default: true
+    description: "Use HUD (You can see HUD)"
+   superbar.cmd:
+    default: true
+    description: "Use superBAR commands"
+   superbar.help:
+    default: true
+    description: "See superBAR help"
+   superbar.switch:
+    default: true
+    description: "Enable/Disable HUD for you"
+   superbar.change:
+    default: op
+    description: "Change settings via command"
+   superbar.reload:
+    default: op
+    description: "Reload settings"
