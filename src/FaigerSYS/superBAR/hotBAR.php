@@ -1,16 +1,20 @@
 <?PHP
 namespace FaigerSYS\superBAR;
+
 use pocketmine\scheduler\PluginTask;
 
 class hotBAR extends PluginTask {
-	public $serv, $eT, $noF, $ppup, $CASH, $FACT, $FT_v, $GP, $GT, $PP, $PP_v, $KD, $FRMT, $PFM, $TIME_FRMT;
-	public $ADNS = array('%NICK%', '%MONEY%', '%FACTION%', '%ITEM_ID%', '%ITEM_META%', '%TIME%', '%ONLINE%', '%MAX_ONLINE%', '%X%', '%Y%', '%Z%', '%IP%', '%PP_GROUP%', '%TAG%', '%LOAD%', '%TPS%', '%KILLS%', '%DEATHS%', '%LEVEL%', '%PING%', '%GT%', '%AGT%');
-	public $ADNE = array();
-	public $VR = array();
+	public $serv, $eT, $noF, $ppup, $CASH, $FACT, $FT_v, $GP, $GT, $PP, $PP_v, $KD, $PFM, $TIME_FRMT, $RPLC;
+	public $FRMT = array(), $ADNS = array(), $VR = array(), $DISP = array();
 	
-	public function ddts($tz) {
+	public function init($tz = false) {
 		if ($tz)
 			date_default_timezone_set($tz);
+		$this->RPLC = $this->getStrings();
+	}
+	
+	public function getStrings() {
+		return array('%NICK%', '%MONEY%', '%FACTION%', '%ITEM_ID%', '%ITEM_META%', '%TIME%', '%ONLINE%', '%MAX_ONLINE%', '%X%', '%Y%', '%Z%', '%IP%', '%PP_GROUP%', '%TAG%', '%LOAD%', '%TPS%', '%KILLS%', '%DEATHS%', '%LEVEL%', '%PING%', '%GT%', '%AGT%');
 	}
 	
 	public function onRun($tick) {
@@ -19,13 +23,14 @@ class hotBAR extends PluginTask {
 		$tps = $this->serv->getTicksPerSecond();
 		$plon = count($this->serv->getOnlinePlayers());
 		$mxon = $this->serv->getMaxPlayers();
+		$FRMT = $this->FRMT;
+		$RPLC = $this->RPLC;
 		$ADNS = $this->ADNS;
-		$ADNE = $this->ADNE;
+		$DISP = $this->DISP;
 		$VR = $this->VR;
 		$a = $id = $mt = 0;
 		foreach ($this->serv->getOnlinePlayers() as $p) {
-			if ($p != null) {
-				$name = $p->getName();
+			if ($DISP[$name = $p->getName()]) {
 				if ($this->PP) {
 					if ($this->PP_v < 1.2)
 						$ppg = $a = $this->PP->getUser($p)->getGroup()->getName();
@@ -66,12 +71,11 @@ class hotBAR extends PluginTask {
 				}
 				
 				$ADNG = [];
-				foreach ($ADNE as $file) {
-					require($file);
-					array_push($ADNG, $onExecute($p, $VR[$file]));
+				foreach ($ADNS as $file => $execute) {
+					array_push($ADNG, $execute($p, $VR[$file]));
 				}
 				
-				$text = str_replace($ADNS, array_merge(array($name, $cash, $fact, $id, $mt, date($this->TIME_FRMT[$a]), $plon, $mxon, intval($p->x), intval($p->y), intval($p->z), $p->getAddress(), $ppg, $p->getNameTag(), $load, $tps, $kll, $dth, $p->getLevel()->getName(), $png, $gt, $agt), $ADNG), $this->FRMT[$a]);
+				$text = str_replace($RPLC, array_merge(array($name, $cash, $fact, $id, $mt, date($this->TIME_FRMT[$a]), $plon, $mxon, intval($p->x), intval($p->y), intval($p->z), $p->getAddress(), $ppg, $p->getNameTag(), $load, $tps, $kll, $dth, $p->getLevel()->getName(), $png, $gt, $agt), $ADNG), $FRMT[$a]);
 				if ($this->ppup[$a])
 					$p->sendPopup($text);
 				else
