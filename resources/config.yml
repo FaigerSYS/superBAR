@@ -1,5 +1,5 @@
 #superBAR config. Plugin by FaigerSYS
-ver: 7
+ver: 8
 ### Please do not change 'ver' ###
 
 #HUD format. For color use §.
@@ -33,6 +33,11 @@ hot-format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
 #   NEED GameTime. You can download it here: https://github.com/FaigerSYS/GameTime/releases/latest
 # \n - new line. WARNING! \n is not the same as /n
 
+#The default state of HUD for the player
+default-enabled: true
+#Tip:
+# Enables or disables HUD for player on join. true - enable . false - disable
+
 #The level of the text offset. Set the variable for example at 30 to see the result.
 text-offset-level: 0
 #Tip:
@@ -40,10 +45,10 @@ text-offset-level: 0
 # Average value (e.g. 30) - to right side
 
 #Type of HUD (popup/tip). 
-type: "popup"
+type: "tip"
 #Tip:
-# To make HUD higher, use "tip"
-# MCPE 0.14.2/0.14.3 does not support tips. But in version 0.15.0 the ability to use 'tip' returned.
+# To make HUD higher, use "tip". Lower - "popup"
+# MCPE 0.14.2/0.14.3 does not support tips. But in version 0.15.0 the ability to use "tip" returned.
 
 #Timer (every *setted parameter* ticks sends to player HUD)
 timer: 15
