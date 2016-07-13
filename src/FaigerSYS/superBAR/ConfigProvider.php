@@ -129,7 +129,6 @@ class ConfigProvider {
 			$all['text-offset-level'] = '0';
 		if (!isset($all['default-enabled']))
 			$all['default-enabled'] = 'true';
-		echo $all['default-enabled'];
 		if (!isset($all['type']))
 			$all['type'] = 'tip';
 		if (!isset($all['timezone']))
