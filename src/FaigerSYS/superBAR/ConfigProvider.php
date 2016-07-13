@@ -8,15 +8,14 @@ use pocketmine\utils\TextFormat as CLR;
 class ConfigProvider {
 	public $main, $config, $pp_config;
 	
-	/*-----SOON-----
-	public function set($k = false, $v = true, $type = 'default', $group = false) {
-		if ($type == 'default' && $k) {
-			$this->def_provider($k, $v);
-		} elseif ($type == 'pp') {
-			$this->pp_provider($group, $k, $v);
-		}
+	const CONFIG_VER = 8;
+	
+	public function set($k = false, $v = true) {
+		if (!$k)
+			return false;
+		$this->def_provider($k, $v);
+		return true;
 	}
-	*/
 	
 	public function loadData() {
 		$this->config = new Config($this->main->getDataFolder() . 'config.yml', Config::YAML);
@@ -24,27 +23,38 @@ class ConfigProvider {
 		
 		$data = $this->config->getAll();
 		
-		$this->main->hotbar->FRMT = array();
 		$this->main->hotbar->TIME_FRMT = array($data['time-format']);
 		$this->main->hotbar->noF = array($data['no-faction']);
+		
+		$this->main->def_enabled = $data['default-enabled'];
 		
 		if ($data['type'] !== 'popup')
 			$this->main->hotbar->ppup = array(false);
 		else
 			$this->main->hotbar->ppup = array(true);
 		
-		$this->main->hotbar->ddts($data['timezone']);
+		$this->main->hotbar->init($data['timezone']);
 		
 		$addonFiles = scandir($this->main->getDataFolder() . 'addons');
+		$n = 0;
 		foreach ($addonFiles as $fileName) {
 			if (preg_match('/\.(php)/', $fileName)) {
 				$this->createVariable = '';
 				require($this->main->getDataFolder() . 'addons/' . $fileName);
+				
 				$str = $onStart();
-				array_push($this->main->hotbar->ADNS, $str);
-				array_push($this->main->hotbar->ADNE, $this->main->getDataFolder() . 'addons/' . $fileName);
-				$this->main->hotbar->VR[$this->main->getDataFolder() . 'addons/' . $fileName] = $this->createVariable;
-				$this->main->getLogger()->info(CLR::YELLOW . 'Loaded addon \'' . CLR::AQUA . $fileName . CLR::YELLOW . '\'! ( ' . $str . ' )');
+				$n++;
+				while (in_array('%ADDON' . $n . '%', $this->main->hotbar->RPLC))
+					$n++;
+				if (empty($str)) {
+					$str = '%ADDON' . $n . '%';
+				}
+				
+				array_push($this->main->hotbar->RPLC, $str);
+				$this->main->hotbar->ADNS[$fileName] = $onExecute;
+				$this->main->hotbar->VR[$fileName] = $this->createVariable;
+				
+				$this->main->sendToConsole(CLR::WHITE . 'Loaded addon \'' . CLR::AQUA . $fileName . CLR::WHITE . '\'! ( ' . $str . ' )');
 			}
 		}
 		
@@ -95,12 +105,12 @@ class ConfigProvider {
 		return intval($data['timer']);
 	}
 	
-	public function update() {
+	private function update() {
 		$ver = $this->config->get('ver');
-		if ($ver != 7) {
-			$this->main->getLogger()->info(CLR::RED . "UPDATING CONFIG [ $ver->7 ]...");
-			$this->def_provider();
-			$this->main->getLogger()->info(CLR::RED . 'UPDATED!!!');
+		if ($ver != self::CONFIG_VER) {
+			$this->main->sendToConsole(CLR::RED . 'UPDATING CONFIG [ ' . $ver . '->' . self::CONFIG_VER . ' ]...');
+			$this->def_provider(); 
+			$this->main->sendToConsole(CLR::RED . 'UPDATED!!!');
 			return true;
 		} else
 			return false;
@@ -116,7 +126,12 @@ class ConfigProvider {
 		file_put_contents($this->main->getDataFolder() . 'config.yml', $this->main->getResource('config.yml'));
 		
 		if (!isset($all['text-offset-level']))
-			$all['text-offset-level'] = 0;
+			$all['text-offset-level'] = '0';
+		if (!isset($all['default-enabled']))
+			$all['default-enabled'] = 'true';
+		echo $all['default-enabled'];
+		if (!isset($all['type']))
+			$all['type'] = 'tip';
 		if (!isset($all['timezone']))
 			$all['timezone'] = 'false';
 		else {
@@ -131,13 +146,14 @@ class ConfigProvider {
 		
 		$conf = file($this->main->getDataFolder() . 'config.yml');
 		$conf[5] = 'hot-format: "' . str_replace("\n", '\n', $all['hot-format']) . "\"\n";
-		$conf[36] = 'text-offset-level: ' . $all['text-offset-level'] . "\n";
-		$conf[42] = 'type: "' . $all['type'] . "\"\n";
-		$conf[48] = 'timer: ' . $all['timer'] . "\n";
-		$conf[54] = 'time-format: "' . $all['time-format'] . "\"\n";
-		$conf[62] = 'no-faction: "' . $all['no-faction'] . "\"\n";
-		$conf[65] = 'timezone: ' . $all['timezone'] . "\n";
-		file_put_contents($this->main->getDataFolder() . 'config.yml', join('', $conf));
+		$conf[36] = 'default-enabled: ' . $all['default-enabled'] . "\n";
+		$conf[41] = 'text-offset-level: ' . $all['text-offset-level'] . "\n";
+		$conf[47] = 'type: "' . $all['type'] . "\"\n";
+		$conf[53] = 'timer: ' . $all['timer'] . "\n";
+		$conf[59] = 'time-format: "' . $all['time-format'] . "\"\n";
+		$conf[67] = 'no-faction: "' . $all['no-faction'] . "\"\n";
+		$conf[70] = 'timezone: ' . $all['timezone'] . "\n";
+		file_put_contents($this->main->getDataFolder() . 'config.yml', implode('', $conf));
 		
 		$this->config->reload();
 	}
@@ -172,7 +188,7 @@ class ConfigProvider {
 			}
 			$n++;
 		}
-		file_put_contents($this->main->getDataFolder() . 'groups.yml', join('', $conf));
+		file_put_contents($this->main->getDataFolder() . 'groups.yml', implode('', $conf));
 		$this->pp_config->reload();
 	}
 }
