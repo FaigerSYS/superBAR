@@ -20,8 +20,6 @@ class PL extends PluginTask {
 		
 		$main->sendToConsole(CLR::GOLD . 'superBAR loading...');
 		
-		$mgr = $main->getServer()->getPluginManager();
-		
 		$this->check = false;
 		
 		@mkdir($main->getDataFolder());
