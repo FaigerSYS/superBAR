@@ -44,86 +44,108 @@ class Main extends PluginBase implements Listener {
 					$this->prefix . "Version " . $this->getDescription()->getVersion() . "\n" . 
 					CLR::GRAY . 'Commands list: ' . CLR::DARK_GREEN . '/sb help'
 				);
+				
 			} elseif ($args[0] == 'help') {
-				if ($sender->hasPermission('superbar.help')) {
-					$sender->sendMessage(
-						$this->prefix . "Commands:\n" .
-						CLR::DARK_GREEN . '/sb enable' . CLR::GREEN . ' or ' . CLR::DARK_GREEN . '/sb on' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "enable HUD for you\n" .
-						CLR::DARK_GREEN . '/sb disable' . CLR::GREEN . ' or ' . CLR::DARK_GREEN . '/sb off' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "disable HUD for you\n" .
-						CLR::DARK_GREEN . '/sb change' . CLR::GREEN . ' or ' . CLR::DARK_GREEN . '/sb set' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "change HUD settings\n" .
-						CLR::DARK_GREEN . '/sb reload' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "reload the superBAR settings\n"
-					);
-				} else
-					$sender->sendMessage($this->prefix . $this->no_perm);
+				if (!$this->hasPlayerPerm($sender, 'help'))
+					return $sender->sendMessage($this->prefix . $this->no_perm);
+				$sender->sendMessage(
+					$this->prefix . "Commands:\n" .
+					CLR::DARK_GREEN . '/sb enable' . CLR::GREEN . ' or ' . CLR::DARK_GREEN . '/sb on' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "enable HUD for you\n" .
+					CLR::DARK_GREEN . '/sb disable' . CLR::GREEN . ' or ' . CLR::DARK_GREEN . '/sb off' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "disable HUD for you\n" .
+					CLR::DARK_GREEN . '/sb change' . CLR::GREEN . ' or ' . CLR::DARK_GREEN . '/sb set' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "change HUD settings\n" .
+					CLR::DARK_GREEN . '/sb reload' . CLR::BLUE . ' - ' . CLR::DARK_AQUA . "reload the superBAR settings\n"
+				);
+					
 			} elseif ($args[0] == 'reload') {
-				if ($sender->hasPermission('superbar.reload')) {
-					$this->dataLoader(true);
-					$sender->sendMessage($this->prefix . 'Successfully reloaded!');
-				} else
-					$sender->sendMessage($this->prefix . $this->no_perm);
+				if (!$this->hasPlayerPerm($sender, 'reload'))
+					return $sender->sendMessage($this->prefix . $this->no_perm);
+				
+				$this->dataLoader(true);
+				$sender->sendMessage($this->prefix . 'Successfully reloaded!');
+				
 			} elseif ($args[0] == 'enable' || $args[0] == 'on') {
+				if (!$this->hasPlayerPerm($sender, 'switch') || !$this->hasPlayerPerm($sender, 'use'))
+					return $sender->sendMessage($this->prefix . $this->no_perm);
+				
 				if ($sender instanceof ConsoleCommandSender)
 					$add = ' But you still will not see it here xD';
 				else
 					$add = '';
 				
-				if ($sender->hasPermission('superbar.switch') && $sender->hasPermission('superbar.use')) {
-					$this->hotbar->DISP[$sender->getName()] = true;
-					$sender->sendMessage($this->prefix . 'Enabled!' . $add);
-				} else
-					$sender->sendMessage($this->prefix . $this->no_perm);
+				$this->hotbar->DISP[$sender->getName()] = true;
+				$sender->sendMessage($this->prefix . 'Enabled!' . $add);
+					
 			} elseif ($args[0] == 'disable' || $args[0] == 'off') {
+				if (!$this->hasPlayerPerm($sender, 'switch') || !$this->hasPlayerPerm($sender, 'use'))
+					return $sender->sendMessage($this->prefix . $this->no_perm);
+				
 				if ($sender instanceof ConsoleCommandSender)
 					$add = ' As well as always :P';
 				else
 					$add = '';
 				
-				if ($sender->hasPermission('superbar.switch') && $sender->hasPermission('superbar.use')) {
-					$this->hotbar->DISP[$sender->getName()] = false;
-					$sender->sendMessage($this->prefix . 'Disabled!' . $add);
-				} else
-					$sender->sendMessage($this->prefix . $this->no_perm);
+				$this->hotbar->DISP[$sender->getName()] = false;
+				$sender->sendMessage($this->prefix . 'Disabled!' . $add);
+				
 			} elseif ($args[0] == 'set' || $args[0] == 'change') {
-				if ($sender->hasPermission('superbar.change')) {
-					$tmp = array('hot-format', 'text-offset-level', 'timer', 'time-format', 'no-faction', 'timezone', 'type', 'default-enabled');
-					if (!isset($args[1])) {
-						$l = CLR::GREEN . '|' . CLR::GRAY;
-						$sender->sendMessage(
-							$this->prefix . 'You can change (For changing:' . CLR::GOLD . ' str' . CLR::GRAY . "):\n" .
-							CLR::GRAY . 'HUD-format: hot-format ' . $l . " Text offset level: text-offset-level\n" . 
-							CLR::GRAY . 'Timer: timer ' . $l . ' Time format: time-format ' . $l . " No Faction: no-faction\n" . 
-							CLR::GRAY . 'Timezone: timezone ' . $l . ' Type: type ' . $l . " Defaul enabled: default-enabled\n" .
-							CLR::DARK_GREEN . '/sb set' . CLR::GOLD . ' <str>' . CLR::DARK_GREEN . ' <value>'
-						);
-					} elseif (in_array($args[1], $tmp)) {
-						if (isset($args[2])) {
-							$value = implode(' ', array_slice($args, 2));
-							$this->conf_provider->set($args[1], $value);
-							$this->dataLoader(true);
-							$sender->sendMessage($this->prefix . 'Successfully changed ' . $args[1] . '!');
-						} else {
-							$sender->sendMessage($this->prefix . CLR::RED . 'Please provide value');
-						}
+				if (!$this->hasPlayerPerm($sender, 'change'))
+					return $sender->sendMessage($this->prefix . $this->no_perm);
+				
+				$tmp = array('hot-format', 'text-offset-level', 'timer', 'time-format', 'no-faction', 'timezone', 'type', 'default-enabled');
+				if (!isset($args[1])) {
+					$l = CLR::GREEN . '|' . CLR::GRAY;
+					$sender->sendMessage(
+						$this->prefix . 'You can change (For changing:' . CLR::GOLD . ' str' . CLR::GRAY . "):\n" .
+						CLR::GRAY . 'HUD-format: hot-format ' . $l . " Text offset level: text-offset-level\n" . 
+						CLR::GRAY . 'Timer: timer ' . $l . ' Time format: time-format ' . $l . " No Faction: no-faction\n" . 
+						CLR::GRAY . 'Timezone: timezone ' . $l . ' Type: type ' . $l . " Defaul enabled: default-enabled\n" .
+						CLR::DARK_GREEN . '/sb set' . CLR::GOLD . ' <str>' . CLR::DARK_GREEN . ' <value>'
+					);
+				} elseif (in_array($args[1], $tmp)) {
+					if (isset($args[2])) {
+						$value = implode(' ', array_slice($args, 2));
+						$this->conf_provider->set($args[1], $value);
+						$this->dataLoader(true);
+						$sender->sendMessage($this->prefix . 'Successfully changed ' . $args[1] . '!');
 					} else {
-						$sender->sendMessage($this->prefix . CLR::RED . 'This setting is not exists');
+						$sender->sendMessage($this->prefix . CLR::RED . 'Please provide value');
 					}
-				} else
-					$sender->sendMessage($this->prefix . $this->no_perm);
+				} else {
+					$sender->sendMessage($this->prefix . CLR::RED . 'This setting is not exists');
+				}
+				
 			} else {
 				$sender->sendMessage($this->prefix . CLR::RED . 'Wrong command!' . CLR::DARK_GREEN . ' /sb help ' . CLR::RED . 'for a list of commands.');
 			}
 		}
 	}
 	
+	/**
+	 * @param PlayerPreLoginEvent $e
+	 * @priority MONITOR
+	 */
 	public function onPreJoin(PlayerPreLoginEvent $e) {
 		$this->hotbar->DISP[$e->getPlayer()->getName()] = false;
 	}
 	
+	/**
+	 * @param PlayerJoinEvent $e
+	 * @priority MONITOR
+	 */
 	public function onJoin(PlayerJoinEvent $e) {
-		if ($e->getPlayer()->hasPermission('superbar.use') && $this->def_enabled)
+		if ($this->hasPlayerPerm($e->getPlayer(), 'use') && $this->def_enabled)
 			$this->hotbar->DISP[$e->getPlayer()->getName()] = true;
 		else
 			$this->hotbar->DISP[$e->getPlayer()->getName()] = false;
+	}
+	
+	public function hasPlayerPerm($player, $perm) {
+		if ($player->hasPermission('superbar'))
+			return true;
+		elseif ($player->hasPermission('superbar.' . $perm))
+			return true;
+		else
+			return false;
 	}
 	
 	public function getPlug($name) {
