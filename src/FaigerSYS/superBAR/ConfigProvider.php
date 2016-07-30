@@ -172,14 +172,14 @@ class ConfigProvider {
 			$name = $group->getName();
 			if (isset($all[$name])) {
 				$conf[$n * 6 + 6] = $name . ":\n";
-				$conf[$n * 6 + 7] = '  hot-format: "' . $all[$name]['hot-format'] . "\"\n";
+				$conf[$n * 6 + 7] = '  hot-format: "' . str_replace("\n", '\n', $all[$name]['hot-format']) . "\"\n";
 				$conf[$n * 6 + 8] = '  text-offset-level: "' . $all[$name]['text-offset-level'] . "\"\n";
 				$conf[$n * 6 + 9] = '  type: "' . $all[$name]['type'] . "\"\n";
 				$conf[$n * 6 + 10] = '  time-format: "' . $all[$name]['time-format'] . "\"\n";
 				$conf[$n * 6 + 11] = '  no-faction: "' . $all[$name]['no-faction'] . "\"\n";
 			} else {
 				$conf[$n * 6 + 6] = $name . ":\n";
-				$conf[$n * 6 + 7] = '  hot-format: "' . $def . "\"\n";
+				$conf[$n * 6 + 7] = '  hot-format: "' . str_replace("\n", '\n', $def) . "\"\n";
 				$conf[$n * 6 + 8] = '  text-offset-level: "' . $def . "\"\n";
 				$conf[$n * 6 + 9] = '  type: "' . $def . "\"\n";
 				$conf[$n * 6 + 10] = '  time-format: "' . $def . "\"\n";
