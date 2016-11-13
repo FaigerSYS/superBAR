@@ -10,10 +10,10 @@ use FaigerSYS\superBAR\BaseModule;
 class EventController extends BaseModule implements Listener {
 	
 	/**
-	 * @param PlayerJoinEvent $e
+	 * @param PlayerRespawnEvent $e
 	 * @priority MONITOR
 	 */
-	public function onJoin(PlayerRespawnEvent $e) {
+	public function onRespawn(PlayerRespawnEvent $e) {
 		$display = ($this->getPlugin()->isDefaultEnabled() && $this->getPlugin()->hasPermission($player = $e->getPlayer(), 'use'));
 		$this->getPlugin()->getHUD()->setDisplay($player->getName(), $display);
 	}
