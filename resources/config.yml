@@ -1,9 +1,10 @@
 #superBAR config. Plugin by FaigerSYS
-ver: 8
+# If HUD don't works please visit this website: 
+ver: 9
 ### Please do not change 'ver' ###
 
 #HUD format. For color use §.
-hot-format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
+hud-format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
 #Tip:
 # %NICK% - name of player
 # %MONEY% - count of player's money
@@ -27,34 +28,34 @@ hot-format: "Hello, %NICK%\nOnline: %ONLINE%/%MAX_ONLINE%"
 #   NEED KillChat. If you have installed CustomChat, install KillChat extension: https://forums.pocketmine.net/plugins/killchat-extension-cc.916/
 #   If not, or if there are any problems, install modified version of KillChat: https://github.com/FaigerSYS/superBAR_additionally/raw/master/KillChat_MOD.phar
 # %LEVEL% - name of player's current world/level
-# %PING% - get ping with player-server.
-#   NEED GetPing. You can download it here: https://github.com/Muirfield/bad-plugins/releases/tag/GetPing-1.0.0 . Plugin maybe is non-working.
 # %GT% / %AGT% - player's duration of session / total time of the game
 #   NEED GameTime. You can download it here: https://github.com/FaigerSYS/GameTime/releases/latest
 # \n - new line. WARNING! \n is not the same as /n
+
+#The level of the HUD shift. Set the variable for example at 30.
+hud-shift-level: 0
+#Tip:
+# Positive value (e.g. 30) - to right side
+# Negative value (e.g. -30) - to left side
 
 #The default state of HUD for the player
 default-enabled: true
 #Tip:
 # Enables or disables HUD for player on join. true - enable . false - disable
 
-#The level of the text offset. Set the variable for example at 30 to see the result.
-text-offset-level: 0
-#Tip:
-# A negative value (e.g. -30) - to left side
-# Average value (e.g. 30) - to right side
-
 #Type of HUD (popup/tip). 
-type: "tip"
+type: "popup"
 #Tip:
 # To make HUD higher, use "tip". Lower - "popup"
-# MCPE 0.14.2/0.14.3 does not support tips. But in version 0.15.0 the ability to use "tip" returned.
+# MCPE 0.14.2, 0.14.3, 0.16.0, 0.16.1 does not support "tip"
 
 #Timer (every *setted parameter* ticks sends to player HUD)
 timer: 15
 #Tip:
 # 20 ticks - 1 second
 # 1 tick - 1/20 seconds
+# For "popup" type recomended paramets is 20. For "tip" - 15
+# If HUD blinking, increase this parameter
 
 #Time format (for %TIME%)
 time-format: "H:i:s"
@@ -70,6 +71,6 @@ no-faction: "NoFaction"
 #Timezone (for %TIME%)
 timezone: false
 #Tip:
-# false - without changes ; "America/New_York" - New York time
-# List of another timezones: https://secure.php.net/manual/timezones.php
-# If not working, go to /path_to_server/bin/php*/bin/php.ini and add/set parameter 'date.timezone' to your timezone
+# false - without changes
+# List of timezones: https://secure.php.net/manual/timezones.php
+# Example: "America/New_York" - New York time

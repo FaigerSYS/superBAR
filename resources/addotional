@@ -1,0 +1,35 @@
+{
+	"texture": {
+		"hud-format": 7,
+		"hud-shift-level": 36,
+		"default-enabled": 42,
+		"type": 47,
+		"timer": 53,
+		"time-format": 61,
+		"no-faction": 69,
+		"timezone": 72
+	},
+	
+	"description": {
+		"hud-format": "HUD format",
+		"hud-shift-level": "HUD shift level",
+		"timer": "Timer",
+		"time-format": "Time format",
+		"no-faction": "No faction message",
+		"timezone": "Timezone of time",
+		"type": "Type of HUD",
+		"default-enabled": "Default enabled"
+	},
+	
+	"pp_settings": {
+		"hud-format": "%DEFAULT%",
+		"hud-shift-level": "%DEFAULT%",
+		"type": "%DEFAULT%",
+		"time-format": "%DEFAULT%"
+	},
+	
+	"fixes": {
+		"hud-format": ["hot-format", "format"],
+		"hud-shift-level": ["text-offset-level"]
+	}
+}

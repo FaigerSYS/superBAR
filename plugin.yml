@@ -1,16 +1,17 @@
 name: superBAR
-main: FaigerSYS\superBAR\Main
-version: 1.5.2
-api: [1.13.0, 2.0.0]
+main: FaigerSYS\superBAR\superBAR
+version: 1.6.0
+api: [2.0.0]
 load: POSTWORLD
 author: FaigerSYS
 description: "Just good and customizable HUD"
+website: "https://github.com/FaigerSYS"
 
 commands:
  superbar:
   description: "superBAR command"
   aliases: [sb, supbar, sbar]
-  permission: 'superbar.cmd'
+  permission: "superbar.cmd"
 
 permissions:
  superbar:
@@ -24,7 +25,7 @@ permissions:
   description: "Use superBAR commands"
  superbar.help:
   default: true
-  description: "See superBAR help"
+  description: "Use superBAR help"
  superbar.switch:
   default: true
   description: "Enable/Disable HUD for you"
