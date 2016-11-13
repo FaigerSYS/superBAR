@@ -50,12 +50,12 @@ type: "popup"
 # MCPE 0.14.2, 0.14.3, 0.16.0, 0.16.1 does not support "tip"
 
 #Timer (every *setted parameter* ticks sends to player HUD)
-timer: 15
+timer: 20
 #Tip:
 # 20 ticks - 1 second
 # 1 tick - 1/20 seconds
 # For "popup" type recomended paramets is 20. For "tip" - 15
-# If HUD blinking, increase this parameter
+# If it disappears quickly increase this parameter
 
 #Time format (for %TIME%)
 time-format: "H:i:s"
