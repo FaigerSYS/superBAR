@@ -63,7 +63,7 @@ class HUD {
 					$data['tip'] ? $p->sendTip($input) : $p->sendPopup($input);
 					continue;
 				} else {
-					$data['format'] = str_replace($input, $output, $format);
+					$format = str_replace($input, $output, $format);
 				}
 				
 				if ($plugins['FactionsPro']) {
