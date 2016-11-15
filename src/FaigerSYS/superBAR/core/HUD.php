@@ -57,12 +57,13 @@ class HUD {
 						$data = $settings['default'];
 				}
 				
+				$format = $data['format'];
 				list($showHUD, $input, $output) = $addons->getFormatedAddons($p);
 				if (!$showHUD) {
 					$data['tip'] ? $p->sendTip($input) : $p->sendPopup($input);
 					continue;
 				} else {
-					$data['format'] = str_replace($input, $output, $data['format']);
+					$data['format'] = str_replace($input, $output, $format);
 				}
 				
 				if ($plugins['FactionsPro']) {
@@ -79,7 +80,7 @@ class HUD {
 				elseif ($plugins['PocketMoney'])
 					$money = $plugins['PocketMoney']->getMoney($name);
 				
-				if ($tmp = $plugins['KillChat'] || $tmp = $plugins['ScorePvP']) {
+				if (($tmp = $plugins['KillChat']) || ($tmp = $plugins['ScorePvP'])) {
 					$kills = $tmp->getKills($name);
 					$deaths = $tmp->getDeaths($name);
 				}
@@ -103,12 +104,13 @@ class HUD {
 				$y = floor($p->getY());
 				$z = floor($p->getZ());
 				
+				$ip = $p->getAddress();
 				$tag = $p->getNameTag();
 				$level = $p->getLevel()->getName();
 				
-				$replace = [$name, $money, $faction, $id, $meta, $date, $playersOnline, $maxOnline, $x, $y, $z, $pp_group, $tag, $load, $tps, $kills, $deaths, $level, $session_time, $all_time];
+				$replace = [$name, $money, $faction, $id, $meta, $date, $playersOnline, $maxOnline, $x, $y, $z, $ip, $pp_group, $tag, $load, $tps, $kills, $deaths, $level, $session_time, $all_time];
 				
-				$text = str_replace($ftree, $replace, $data['format']);
+				$text = str_replace($ftree, $replace, $format);
 				
 				$data['tip'] ? $p->sendTip($text) : $p->sendPopup($text);
 			}
