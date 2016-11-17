@@ -1,5 +1,5 @@
 # superBAR
-#####Just good and customizable hotbar for PocketMine-based servers
+#####Just good and customizable HUD for PocketMine-based servers
 
 To download, look [there](https://github.com/FaigerSYS/superBAR/releases).
 
