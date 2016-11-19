@@ -71,7 +71,7 @@ class HUD {
 						$faction = $plugins['FactionsPro']->getPlayerFaction($name);
 					else
 						$faction = $plugins['FactionsPro']->getSessionFromName($name)->getFactionName();
-					if (strlen($fact) <= 0)
+					if (strlen($faction) <= 0)
 						$faction = $settings['no-faction'];
 				}
 				

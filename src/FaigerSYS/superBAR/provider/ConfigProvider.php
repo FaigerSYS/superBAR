@@ -121,7 +121,6 @@ class ConfigProvider extends BaseModule {
 		$default['format'] = ConfigProvider::getShifted($data['hud-format'], intval($data['hud-shift-level']));
 		$default['time-format'] = $data['time-format'];
 		$default['tip'] = ($data['type'] === 'tip');
-		$default['no-faction'] = $data['no-faction'];
 		
 		if ($this->PurePerms) {
 			$pp = [];
@@ -152,6 +151,7 @@ class ConfigProvider extends BaseModule {
 		$settings['default-enabled'] = (bool) $data['default-enabled'];
 		$settings['timezone'] = $data['timezone'];
 		$settings['timer'] = (int) $timer;
+		$settings['no-faction'] = $data['no-faction'];
 		
 		$settings['default'] = $default;
 		$settings['pp'] = $pp;
