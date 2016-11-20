@@ -128,10 +128,10 @@ class HUD {
 		if (strpos($format, '%FACTION%') === false)
 			$plugins['FactionsPro'] = false;
 		
-		if (strpos($format, '%KILLS%') === false || strpos($format, '%DEATHS%') === false)
+		if (strpos($format, '%KILLS%') === false && strpos($format, '%DEATHS%') === false)
 			$plugins['ScorePvP'] = $plugins['KillChat'] = false;
 		
-		if (strpos($format, '%GT%') === false || strpos($format, '%AGT%') === false)
+		if (strpos($format, '%GT%') === false && strpos($format, '%AGT%') === false)
 			$plugins['GameTime'] = false;
 		
 		$pp_data = $this->settings['pp'];
