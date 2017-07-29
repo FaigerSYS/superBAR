@@ -1,5 +1,6 @@
+### DISCONTINUED. The new plugin will be made in the future
+***
 # superBAR
-#####Just good and customizable HUD for PocketMine-based servers
 
 To download, look [there](https://github.com/FaigerSYS/superBAR/releases).
 
