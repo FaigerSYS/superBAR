@@ -3,6 +3,7 @@ namespace FaigerSYS\superBAR\controller;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 
 use FaigerSYS\superBAR\BaseModule;
